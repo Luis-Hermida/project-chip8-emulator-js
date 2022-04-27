@@ -12,7 +12,7 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "parcel": "^1.12.4",
+    "parcel": "1.12.3",
     "parcel-plugin-static-files-copy": "^2.5.0"
   },
   "staticFiles": {

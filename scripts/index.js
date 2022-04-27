@@ -1,5 +1,5 @@
-import Monitor from "./Monitor";
+import Renderer from "./renderer";
 
-const monitor = new Monitor(document.getElementById("monitor"));
+const monitor = new Renderer(15);
 
 monitor.testRender();

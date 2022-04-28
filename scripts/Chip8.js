@@ -1,6 +1,8 @@
+import Keyboard from "./Keyboard";
 import Renderer from "./renderer";
 
 const renderer = new Renderer(15);
+const keyboard = new Keyboard();
 
 let fps = 60;
 let frameCount = 0;
@@ -26,8 +28,8 @@ const animate = (newtime) => {
 
   // if enough time has elapsed, draw the next frame
   if (elapsed > fpsInterval) {
-    // Get ready for next frame by setting then=now, but...
-    // Also, adjust for fpsInterval not being multiple of 16.67
+    // Get ready for next frame by setting then=now, but
+    // also adjust for fpsInterval
     then = now - (elapsed % fpsInterval);
 
     // Report seconds since start and achieved fps.

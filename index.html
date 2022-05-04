@@ -11,9 +11,24 @@
     <title>CHIP-8</title>
   </head>
   <body>
+    <header>
+      <div>
+        <button id="reload">RELOAD</button>
+        <select name="roms" id="roms">
+          <option value="BLITZ">BLITZ</option>
+          <option value="BLINKY">BLINKY</option>
+          <option value="BRICK">BRICK</option>
+          <option value="MAZE">MAZE</option>
+          <option value="PICTURE">PICTURE</option>
+          <option value="TANK">TANK</option>
+          <option value="SPACE-INVADER">SPACE-INVADER</option>
+        </select>
+      </div>
+      <span></span>
+      <p id="fps"></p>
+    </header>
     <main>
       <canvas></canvas>
-      <p id="fps"></p>
     </main>
   </body>
 </html>

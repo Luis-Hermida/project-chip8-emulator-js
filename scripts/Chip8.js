@@ -36,7 +36,7 @@ const animate = (newtime) => {
     let sinceStart = now - startTime;
     let currentFps =
       Math.round((1000 / (sinceStart / ++frameCount)) * 100) / 100;
-    document.getElementById("fps").textContent = currentFps + " fps.";
+    document.getElementById("fps").textContent = currentFps + " FPS";
   }
 
   // Request another frame

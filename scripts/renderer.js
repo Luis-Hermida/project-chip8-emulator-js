@@ -63,10 +63,9 @@ export default class Renderer {
 
   testRender() {
     // Testing Max values
-    // this.setPixel(0, 0);
-    // this.setPixel(63, 0);
-    // this.setPixel(0, 31);
-    // this.setPixel(63, 31);
+    this.setPixel(0, 0);
+    this.setPixel(63, 0);
+    this.setPixel(0, 31);
     this.setPixel(63, 31);
 
     // Testing out of bonds

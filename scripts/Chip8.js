@@ -1,8 +1,10 @@
 import Keyboard from "./Keyboard";
 import Renderer from "./renderer";
+import Speaker from "./Speaker";
 
 const renderer = new Renderer(15);
 const keyboard = new Keyboard();
+const speaker = new Speaker(); // NEW
 
 let fps = 60;
 let frameCount = 0;

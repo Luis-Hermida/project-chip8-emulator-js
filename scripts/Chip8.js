@@ -1,10 +1,12 @@
 import Keyboard from "./Keyboard";
 import Renderer from "./renderer";
 import Speaker from "./Speaker";
+import CPU from "./cpu";
 
 const renderer = new Renderer(15);
 const keyboard = new Keyboard();
-const speaker = new Speaker(); // NEW
+const speaker = new Speaker();
+const cpu = new CPU(renderer, keyboard, speaker);
 
 let fps = 60;
 let frameCount = 0;
@@ -18,6 +20,7 @@ const startAnimating = (fps) => {
   // TESTING CODE. REMOVE WHEN DONE TESTING.
   renderer.testRender();
   renderer.render();
+  cpu.loadSpritesIntoMemory();
   // END TESTING CODE
 
   animate();

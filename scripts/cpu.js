@@ -72,4 +72,36 @@ export default class CPU {
 
     console.log(this.memory);
   }
+
+  // Chip-8 programs start at location 0x200, so we start loading the program into that memory and upwards.
+  loadProgramIntoMemory(program) {
+    for (let loc = 0; loc < program.length; loc++) {
+      this.memory[0x200 + loc] = program[loc];
+    }
+  }
+
+  // We make an HTTP request and retrieve a file.
+  loadRom(romName) {
+    var request = new XMLHttpRequest();
+    var self = this;
+
+    // Handles the response received from sending (request.send()) our request
+    request.onload = function () {
+      // If the request response has content
+      if (request.response) {
+        // Store the contents of the response in an 8-bit array
+        let program = new Uint8Array(request.response);
+
+        // Load the ROM/program into memory
+        self.loadProgramIntoMemory(program);
+      }
+    };
+
+    // Initialize a GET request to retrieve the ROM from our roms folder
+    request.open("GET", "roms/" + romName);
+    request.responseType = "arraybuffer";
+
+    // Send the GET request
+    request.send();
+  }
 }

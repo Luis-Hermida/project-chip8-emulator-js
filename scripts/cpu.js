@@ -177,28 +177,68 @@ export default class CPU {
     // 0x5460 & 0x00F0 = 0x060 >> 8 = 0x006
     let y = (opcode & 0x00f0) >> 4;
 
+    // We take the 1st nibble of each instruction because it's the most significant value
     switch (opcode & 0xf000) {
       case 0x0000:
+        // 0x0nnn This instruction is only used on the old computers on which Chip-8 was originally implemented. It is ignored by modern interpreters.
         switch (opcode) {
           case 0x00e0:
+            // Clear the display
+            this.renderer.clear();
             break;
           case 0x00ee:
+            // Return from a subroutine.
+            // The interpreter sets the program counter to the address at the top of the stack, then subtracts 1 from the stack pointer.
+            this.pc = this.stack.pop();
             break;
         }
         break;
       case 0x1000:
+        // Jump to location nnn.
+        // The interpreter sets the program counter to nnn.
+        this.pc = opcode & 0x0fff;
         break;
       case 0x2000:
+        // Call subroutine at nnn.
+        // The interpreter increments the stack pointer, then puts the current PC on the top of the stack. The PC is then set to nnn.
+        // ! - We don't use a stack pointer we have an array to handle it.
+        this.stack.push(this.pc);
+        this.pc = opcode & 0x0fff;
         break;
       case 0x3000:
+        // Skip next instruction if Vx = kk.
+        // The interpreter compares register Vx to kk, and if they are equal, increments the program counter by 2.
+
+        // prettier-ignore
+        if (this.v[x] === (opcode & 0x00ff)) {
+          this.pc + 2;
+        }
         break;
       case 0x4000:
+        // Skip next instruction if Vx != kk.
+        // The interpreter compares register Vx to kk, and if they are not equal, increments the program counter by 2.
+
+        // prettier-ignore
+        if (this.v[x] !== (opcode & 0x00ff)) {
+          this.pc + 2;
+        }
         break;
       case 0x5000:
+        // Skip next instruction if Vx = Vy.
+        // The interpreter compares register Vx to register Vy, and if they are equal, increments the program counter by 2.
+        if (this.v[x] === this.v[y]) {
+          this.pc + 2;
+        }
         break;
       case 0x6000:
+        // Set Vx = kk.
+        // The interpreter puts the value kk into register Vx.
+        this.v[x] = opcode & 0x00ff;
         break;
       case 0x7000:
+        // Set Vx = Vx + kk.
+        // Adds the value kk to the value of register Vx, then stores the result in Vx.
+        this.v[x] += opcode & 0x00ff;
         break;
       case 0x8000:
         switch (opcode & 0xf) {

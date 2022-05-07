@@ -243,22 +243,64 @@ export default class CPU {
       case 0x8000:
         switch (opcode & 0xf) {
           case 0x0:
+            //Set Vx = Vy.
+            // Stores the value of register Vy in register Vx.
+            this.v[x] = this.v[y];
             break;
           case 0x1:
+            // Set Vx = Vx OR Vy.
+            // Performs a bitwise OR on the values of Vx and Vy, then stores the result in Vx.
+            // A bitwise OR compares the corrseponding bits from two values, and if either bit is 1, then the same bit in the result is also 1. Otherwise, it is 0.
+            this.v[x] |= this.v[y];
             break;
           case 0x2:
+            // Set Vx = Vx AND Vy.
+            // Performs a bitwise AND on the values of Vx and Vy, then stores the result in Vx.
+            // A bitwise AND compares the corrseponding bits from two values, and if both bits are 1, then the same bit in the result is also 1. Otherwise, it is 0.
+            this.v[x] &= this.v[y];
             break;
           case 0x3:
+            // Set Vx = Vx XOR Vy.
+            // Performs a bitwise exclusive OR on the values of Vx and Vy, then stores the result in Vx.
+            // An exclusive OR compares the corrseponding bits from two values, and if the bits are not both the same, then the corresponding bit in the result is set to 1. Otherwise, it is 0.
+            this.v[x] ^= this.v[y];
             break;
           case 0x4:
+            // Set Vx = Vx + Vy, set VF = carry.
+            // The values of Vx and Vy are added together.
+            // If the result is greater than 8 bits (i.e., > 255,) VF is set to 1, otherwise 0. Only the lowest 8 bits of the result are kept, and stored in Vx.
+            let sum = (this.v[x] += this.v[y]);
+            this.v[0xf] = 0;
+            if (sum > 0xff) this.v[0xf] = 1;
+            this.v[x] = sum;
             break;
           case 0x5:
+            // Set Vx = Vx - Vy, set VF = NOT borrow.
+            // If Vx > Vy, then VF is set to 1, otherwise 0. Then Vy is subtracted from Vx, and the results stored in Vx.
+            this.v[0xf] = 0;
+            if (this.v[x] > this.v[y]) this.v[0xf] = 1;
+            this.v[x] -= this.v[y];
             break;
           case 0x6:
+            // Set Vx = Vx SHR 1.
+            // If the least-significant bit of Vx is 1, then VF is set to 1, otherwise 0. Then Vx is divided by 2.
+            // 0x1 == 0001
+            this.v[0xf] = this.v[x] & 0x1;
+            this.v[x] >>= 1; // Dividing?
             break;
           case 0x7:
+            //Set Vx = Vy - Vx, set VF = NOT borrow.
+            //If Vy > Vx, then VF is set to 1, otherwise 0. Then Vx is subtracted from Vy, and the results stored in Vx.
+            this.v[0xf] = 0;
+            if (this.v[y] > this.v[x]) this.v[0xf] = 1;
+            this.v[y] -= this.v[x];
             break;
           case 0xe:
+            // Set Vx = Vx SHL 1.
+            // If the most-significant bit of Vx is 1, then VF is set to 1, otherwise to 0. Then Vx is multiplied by 2.
+            // 0x80 === 10000000
+            this.v[0xf] = this.v[x] & 0x80;
+            this.v[x] <<= 1; // Multiplying ?
             break;
         }
         break;

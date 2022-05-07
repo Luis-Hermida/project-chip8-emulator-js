@@ -65,7 +65,7 @@ export default class CPU {
     ];
 
     // According to the technical reference, sprites are stored in the interpreter section of memory starting at hex 0x000
-    // From 0 to 79 of all 4096 memory space if used for the sprites using bytes values.
+    // From 0 to 79 of all 4096 memory space is used for the sprites using bytes values.
     for (let i = 0; i < sprites.length; i++) {
       this.memory[i] = sprites[i];
     }
@@ -103,5 +103,60 @@ export default class CPU {
 
     // Send the GET request
     request.send();
+  }
+
+  cycle() {
+    for (let i = 0; i < this.speed; i++) {
+      if (!this.paused) {
+        // Each instruction is 16 bits (2 bytes) but our memory is made up of 8 bit (1 byte) pieces.
+        // But you can't just combine two, 1-byte values to get a 2-byte value. To properly do this, we need to shift the first piece of memory.
+
+        /* Example
+        this.memory[this.pc] = PC = 0x10
+        this.memory[this.pc + 1] = PC + 1 = 0xF0
+
+        this.memory[this.pc] << 8 = 0x1000
+        0x1000 | 0xF0 = 0x10F0
+        */
+        let opcode = (this.memory[this.pc] << 8) | this.memory[this.pc + 1];
+        this.executeIntruction(opcode);
+      }
+
+      if (!this.paused) {
+        this.updateTimers();
+      }
+
+      this.playSound();
+      this.renderer.render();
+    }
+  }
+
+  // The delay timer is active whenever the delay timer register (DT) is non-zero.
+  // This timer does nothing more than subtract 1 from the value of DT at a rate of 60Hz. When DT reaches 0, it deactivates.
+
+  // The sound timer is active whenever the sound timer register (ST) is non-zero. This timer also decrements at a rate of 60Hz,
+  // however, as long as ST's value is greater than zero, the Chip-8 buzzer will sound. When ST reaches zero, the sound timer deactivates.
+  updateTimers() {
+    if (this.delayTimer > 0) {
+      this.delayTimer -= 1;
+    }
+
+    if (this.soundTimer > 0) {
+      this.soundTimer -= 1;
+    }
+  }
+
+  playSound() {
+    if (this.soundTimer > 0) {
+      this.speaker.play(440);
+    } else {
+      this.speaker.stop();
+    }
+  }
+
+  executeInstruction(opcode) {
+    // Increment the program counter to prepare it for the next instruction.
+    // Each instruction is 2 bytes long, so increment it by 2.
+    this.pc += 2;
   }
 }

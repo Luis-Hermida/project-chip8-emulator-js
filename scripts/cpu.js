@@ -154,9 +154,27 @@ export default class CPU {
     }
   }
 
+  /*
+  Variables: 
+  nnn or addr - A 12-bit value, the lowest 12 bits of the instruction
+  n or nibble - A 4-bit value, the lowest 4 bits of the instruction
+  x - A 4-bit value, the lower 4 bits of the high byte of the instruction
+  y - A 4-bit value, the upper 4 bits of the low byte of the instruction
+  kk or byte - An 8-bit value, the lowest 8 bits of the instruction
+  */
   executeInstruction(opcode) {
     // Increment the program counter to prepare it for the next instruction.
     // Each instruction is 2 bytes long, so increment it by 2.
     this.pc += 2;
+
+    // We only need the 2nd nibble, so grab the value of the 2nd nibble
+    // and shift it right 8 bits to get rid of everything but that 2nd nibble.
+    // 0x5460 & 0x0F00 = 0x0400 >> 8 = 0x04
+    let x = (opcode & 0x0f00) >> 8;
+
+    // We only need the 3rd nibble, so grab the value of the 3rd nibble
+    // and shift it right 4 bits to get rid of everything but that 3rd nibble.
+    // 0x5460 & 0x00F0 = 0x060 >> 8 = 0x006
+    let y = (opcode & 0x00f0) >> 4;
   }
 }

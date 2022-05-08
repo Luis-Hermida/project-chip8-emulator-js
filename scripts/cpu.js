@@ -305,20 +305,67 @@ export default class CPU {
         }
         break;
       case 0x9000:
+        // Skip next instruction if Vx != Vy.
+        // The values of Vx and Vy are compared, and if they are not equal, the program counter is increased by 2.
+        if (this.v[x] !== this.v[y]) this.pc += 2;
         break;
       case 0xa000:
+        // Set I = nnn.
+        // The value of register I is set to nnn.
+        this.i = opcode & 0x0fff;
         break;
       case 0xb000:
+        // Jump to location nnn + V0.
+        // The program counter is set to nnn plus the value of V0.
+        this.pc = (opcode & 0x0fff) + this.v[0];
         break;
       case 0xc000:
+        // Set Vx = random byte AND kk.
+        // The interpreter generates a random number from 0 to 255, which is then ANDed with the value kk.
+        // The results are stored in Vx.
+        let rand = Math.floor(Math.random() * 0xff);
+        this.v[x] = rand & (opcode & 0xff);
         break;
       case 0xd000:
+        // ??
+        // Display n-byte sprite starting at memory location I at (Vx, Vy), set VF = collision.
+
+        // The interpreter reads n bytes from memory, starting at the address stored in I.
+        // These bytes are then displayed as sprites on screen at coordinates (Vx, Vy).
+        // Sprites are XORed onto the existing screen.
+        // If this causes any pixels to be erased, VF is set to 1, otherwise it is set to 0.
+        // If the sprite is positioned so part of it is outside the coordinates of the display,
+        // it wraps around to the opposite side of the screen.
+        let width = 8; // Each sprite is 8 pixesl width
+        let height = opcode & 0xf;
+
+        this.v[0xf] = 0;
+
+        for (let row = 0; row < height; row++) {
+          let sprite = this.memory[this.i + row];
+
+          for (let col = 0; col < width; col++) {
+            // If the bit (sprite) is not 0, render/erase the pixel
+            if ((sprite & 0x80) > 0) {
+              // If setPixel returns 1, which means a pixel was erased, set VF to 1
+              if (this.renderer.setPixel(this.v[x] + col, this.v[y] + row)) {
+                this.v[0xf] = 1;
+              }
+            }
+
+            // Shift the sprite left 1. This will move the next next col/bit of the sprite into the first position.
+            // Ex. 10010000 << 1 will become 0010000
+            sprite <<= 1;
+          }
+        }
         break;
       case 0xe000:
         switch (opcode & 0xff) {
           case 0x9e:
+            if (this.keyboard.isKeyPressed(this.v[x])) this.pc += 2;
             break;
           case 0xa1:
+            if (!this.keyboard.isKeyPressed(this.v[x])) this.pc += 2;
             break;
         }
         break;

@@ -362,9 +362,13 @@ export default class CPU {
       case 0xe000:
         switch (opcode & 0xff) {
           case 0x9e:
+            // Checks the keyboard, and if the key corresponding to the value of Vx is currently in the down position, PC is increased by 2.
+            // Skip next instruction if key with the value of Vx is pressed.
             if (this.keyboard.isKeyPressed(this.v[x])) this.pc += 2;
             break;
           case 0xa1:
+            // Skip next instruction if key with the value of Vx is not pressed.
+            // Checks the keyboard, and if the key corresponding to the value of Vx is currently in the up position, PC is increased by 2.
             if (!this.keyboard.isKeyPressed(this.v[x])) this.pc += 2;
             break;
         }
@@ -372,22 +376,69 @@ export default class CPU {
       case 0xf000:
         switch (opcode & 0xff) {
           case 0x07:
+            // Set Vx = delay timer value.
+            // The value of DT is placed into Vx.
+            this.v[x] = this.delayTimer;
             break;
           case 0x0a:
+            // Wait for a key press, store the value of the key in Vx.
+            // All execution stops until a key is pressed, then the value of that key is stored in Vx.
+            this.paused = true;
+
+            this.keyboard.onNextKeyPress = function (key) {
+              this.v[x] = key;
+              this.paused = false;
+            }.bind(this);
             break;
           case 0x15:
+            // Set delay timer = Vx.
+            // DT is set equal to the value of Vx.
+            this.delayTimer = this.v[x];
             break;
           case 0x18:
+            // Set sound timer = Vx.
+            // ST is set equal to the value of Vx.
+            this.soundTimer = this.v[x];
             break;
           case 0x1e:
+            // Set I = I + Vx.
+            // The values of I and Vx are added, and the results are stored in I.
+            this.i += this.v[x];
             break;
           case 0x29:
+            // Set I = location of sprite for digit Vx.
+            // The value of I is set to the location for the hexadecimal sprite corresponding to the value of Vx.
+            this.i = this.v[x] * 5;
             break;
           case 0x33:
+            // Store BCD representation of Vx in memory locations I, I+1, and I+2.
+
+            // The interpreter takes the decimal value of Vx, and places the hundreds digit in memory at location in I,
+            // the tens digit at location I+1, and the ones digit at location I+2.
+
+            // Get the hundreds digit and place it in I.
+            this.memory[this.i] = parseInt(this.v[x] / 100);
+
+            // Get tens digit and place it in I+1. Gets a value between 0 and 99,
+            // then divides by 10 to give us a value between 0 and 9.
+            this.memory[this.i + 1] = parseInt((this.v[x] % 100) / 10);
+
+            // Get the value of the ones (last) digit and place it in I+2.
+            this.memory[this.i + 2] = parseInt(this.v[x] % 10);
             break;
           case 0x55:
+            // Store registers V0 through Vx in memory starting at location I.
+            // The interpreter copies the values of registers V0 through Vx into memory, starting at the address in I.
+            for (let registerIndex = 0; registerIndex <= x; registerIndex++) {
+              this.memory[this.i + registerIndex] = this.v[registerIndex];
+            }
             break;
           case 0x65:
+            // Read registers V0 through Vx from memory starting at location I.
+            // The interpreter reads values from memory starting at location I into registers V0 through Vx.
+            for (let registerIndex = 0; registerIndex <= x; registerIndex++) {
+              this.v[registerIndex] = this.memory[this.i + registerIndex];
+            }
             break;
         }
         break;

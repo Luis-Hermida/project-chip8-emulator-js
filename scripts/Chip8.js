@@ -17,11 +17,8 @@ const startAnimating = (fps) => {
   then = window.performance.now();
   startTime = then;
 
-  // TESTING CODE. REMOVE WHEN DONE TESTING.
-  renderer.testRender();
-  renderer.render();
   cpu.loadSpritesIntoMemory();
-  // END TESTING CODE
+  cpu.loadProgramIntoMemory("BLITZ");
 
   animate();
 };
@@ -33,6 +30,7 @@ const animate = (newtime) => {
 
   // if enough time has elapsed, draw the next frame
   if (elapsed > fpsInterval) {
+    cpu.cycle();
     // Get ready for next frame by setting then=now, but
     // also adjust for fpsInterval
     then = now - (elapsed % fpsInterval);

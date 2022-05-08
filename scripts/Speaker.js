@@ -8,11 +8,9 @@ export default class Speaker {
 
     // Create a gain to control the volume
     this.gain = this.audioContext.createGain();
-    this.oscillatorNode = this.audioContext.createOscillator();
 
     // Connect the oscillator to the context
-    this.oscillatorNode.connect(this.audioContext.destination);
-    // this.gain.connect(audioContext.destination)
+    this.gain.connect(this.audioContext.destination);
 
     // Mute the audio (Example)
     // this.gain.setValueAtTime(0, this.audioContext.currentTime);
@@ -23,7 +21,7 @@ export default class Speaker {
 
   // Plays a sound at the desired frequency
   playSound(frecuency) {
-    if (this.audioContext && !!this.oscillatorNode) {
+    if (this.audioContext && !this.oscillatorNode) {
       this.oscillatorNode = this.audioContext.createOscillator();
     }
 
@@ -36,7 +34,7 @@ export default class Speaker {
     );
 
     // Connect the gain and start the sound
-    this.oscillatorNode.connect(this.audioContext.destination);
+    this.oscillatorNode.connect(this.gain);
     this.oscillatorNode.start();
   }
 

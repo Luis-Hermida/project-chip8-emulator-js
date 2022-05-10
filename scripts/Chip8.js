@@ -1,7 +1,7 @@
-import Keyboard from "./Keyboard";
-import Renderer from "./renderer";
-import Speaker from "./Speaker";
-import CPU from "./cpu";
+import Keyboard from "./keyboard.js";
+import Renderer from "./renderer.js";
+import Speaker from "./speaker.js";
+import CPU from "./cpu.js";
 
 const renderer = new Renderer(15);
 const keyboard = new Keyboard();

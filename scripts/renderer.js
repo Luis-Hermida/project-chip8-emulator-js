@@ -32,7 +32,7 @@ export default class Renderer {
     // XOR - Toggle between 1 and 0
     this.display[pixelLocation] ^= 1;
     // Return true if a pixel was erased and false if not - (0 is falsy)
-    return this.display[pixelLocation];
+    return !this.display[pixelLocation];
   }
 
   clear() {
@@ -40,9 +40,8 @@ export default class Renderer {
   }
 
   render() {
-    // We set everything to black
-    this.canvasContext.fillStyle = "#000";
-    this.canvasContext.fillRect(0, 0, this.canvas.width, this.canvas.height);
+    // Clears the display every render cycle. Typical for a render loop.
+    this.canvasContext.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
     for (let index = 0; index < this.columns * this.rows; index++) {
       // If the pixel is 1 we want to draw green

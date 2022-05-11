@@ -3,32 +3,11 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <script src="./scripts/chip8.js" defer></script>
     <link rel="stylesheet" href="style.css" />
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>CHIP-8</title>
   </head>
   <body>
-    <header>
-      <div>
-        <button id="reload">RELOAD</button>
-        <select name="roms" id="roms">
-          <option value="BLITZ">BLITZ</option>
-          <option value="BLINKY">BLINKY</option>
-          <option value="BRICK">BRICK</option>
-          <option value="MAZE">MAZE</option>
-          <option value="PICTURE">PICTURE</option>
-          <option value="TANK">TANK</option>
-          <option value="SPACE-INVADER">SPACE-INVADER</option>
-        </select>
-      </div>
-      <span></span>
-      <p id="fps"></p>
-    </header>
-    <main>
-      <canvas></canvas>
-    </main>
+    <canvas></canvas>
+    <script type="module" src="./scripts/chip8.js"></script>
   </body>
 </html>

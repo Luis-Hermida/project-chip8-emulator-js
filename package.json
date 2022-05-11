@@ -18,8 +18,8 @@
   "staticFiles": {
     "staticPath": [
       {
-        "staticOutDir": "./rom",
-        "staticPath": "rom"
+        "staticOutDir": "./roms",
+        "staticPath": "roms"
       }
     ]
   },

@@ -9,7 +9,6 @@ const speaker = new Speaker();
 const cpu = new CPU(renderer, keyboard, speaker);
 
 let fps = 60;
-let frameCount = 0;
 let fpsInterval, startTime, now, then, elapsed;
 
 const startAnimating = (fps) => {
@@ -18,7 +17,7 @@ const startAnimating = (fps) => {
   startTime = then;
 
   cpu.loadSpritesIntoMemory();
-  cpu.loadProgramIntoMemory("BLITZ");
+  cpu.loadRom("BLITZ");
 
   animate();
 };
@@ -36,10 +35,10 @@ const animate = (newtime) => {
     then = now - (elapsed % fpsInterval);
 
     // Report seconds since start and achieved fps.
-    let sinceStart = now - startTime;
-    let currentFps =
-      Math.round((1000 / (sinceStart / ++frameCount)) * 100) / 100;
-    document.getElementById("fps").textContent = currentFps + " FPS";
+    // let sinceStart = now - startTime;
+    // let currentFps =
+    //   Math.round((1000 / (sinceStart / ++frameCount)) * 100) / 100;
+    // document.getElementById("fps").textContent = currentFps + " FPS";
   }
 
   // Request another frame

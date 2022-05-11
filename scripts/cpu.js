@@ -73,7 +73,6 @@ export default class CPU {
 
   // Chip-8 programs start at location 0x200, so we start loading the program into that memory and upwards.
   loadProgramIntoMemory(program) {
-    console.log(typeof program);
     for (let loc = 0; loc < program.length; loc++) {
       this.memory[0x200 + loc] = program[loc];
     }
@@ -147,7 +146,7 @@ export default class CPU {
 
   playSound() {
     if (this.soundTimer > 0) {
-      this.speaker.play(440);
+      this.speaker.playSound(440);
     } else {
       this.speaker.stop();
     }
@@ -195,22 +194,22 @@ export default class CPU {
       case 0x1000:
         // Jump to location nnn.
         // The interpreter sets the program counter to nnn.
-        this.pc = opcode & 0x0fff;
+        this.pc = opcode & 0xfff;
         break;
       case 0x2000:
         // Call subroutine at nnn.
         // The interpreter increments the stack pointer, then puts the current PC on the top of the stack. The PC is then set to nnn.
         // ! - We don't use a stack pointer we have an array to handle it.
         this.stack.push(this.pc);
-        this.pc = opcode & 0x0fff;
+        this.pc = opcode & 0xfff;
         break;
       case 0x3000:
         // Skip next instruction if Vx = kk.
         // The interpreter compares register Vx to kk, and if they are equal, increments the program counter by 2.
 
         // prettier-ignore
-        if (this.v[x] === (opcode & 0x00ff)) {
-          this.pc + 2;
+        if (this.v[x] === (opcode & 0xff)) {
+          this.pc += 2;
         }
         break;
       case 0x4000:
@@ -218,26 +217,26 @@ export default class CPU {
         // The interpreter compares register Vx to kk, and if they are not equal, increments the program counter by 2.
 
         // prettier-ignore
-        if (this.v[x] !== (opcode & 0x00ff)) {
-          this.pc + 2;
+        if (this.v[x] !== (opcode & 0xff)) {
+          this.pc += 2;
         }
         break;
       case 0x5000:
         // Skip next instruction if Vx = Vy.
         // The interpreter compares register Vx to register Vy, and if they are equal, increments the program counter by 2.
         if (this.v[x] === this.v[y]) {
-          this.pc + 2;
+          this.pc += 2;
         }
         break;
       case 0x6000:
         // Set Vx = kk.
         // The interpreter puts the value kk into register Vx.
-        this.v[x] = opcode & 0x00ff;
+        this.v[x] = opcode & 0xff;
         break;
       case 0x7000:
         // Set Vx = Vx + kk.
         // Adds the value kk to the value of register Vx, then stores the result in Vx.
-        this.v[x] += opcode & 0x00ff;
+        this.v[x] += opcode & 0xff;
         break;
       case 0x8000:
         switch (opcode & 0xf) {
@@ -285,21 +284,21 @@ export default class CPU {
             // If the least-significant bit of Vx is 1, then VF is set to 1, otherwise 0. Then Vx is divided by 2.
             // 0x1 == 0001
             this.v[0xf] = this.v[x] & 0x1;
-            this.v[x] >>= 1; // Dividing?
+            this.v[x] >>= 1;
             break;
           case 0x7:
             //Set Vx = Vy - Vx, set VF = NOT borrow.
             //If Vy > Vx, then VF is set to 1, otherwise 0. Then Vx is subtracted from Vy, and the results stored in Vx.
             this.v[0xf] = 0;
             if (this.v[y] > this.v[x]) this.v[0xf] = 1;
-            this.v[y] -= this.v[x];
+            this.v[x] = this.v[y] - this.v[x];
             break;
           case 0xe:
             // Set Vx = Vx SHL 1.
             // If the most-significant bit of Vx is 1, then VF is set to 1, otherwise to 0. Then Vx is multiplied by 2.
             // 0x80 === 10000000
             this.v[0xf] = this.v[x] & 0x80;
-            this.v[x] <<= 1; // Multiplying ?
+            this.v[x] <<= 1;
             break;
         }
         break;
@@ -311,12 +310,12 @@ export default class CPU {
       case 0xa000:
         // Set I = nnn.
         // The value of register I is set to nnn.
-        this.i = opcode & 0x0fff;
+        this.i = opcode & 0xfff;
         break;
       case 0xb000:
         // Jump to location nnn + V0.
         // The program counter is set to nnn plus the value of V0.
-        this.pc = (opcode & 0x0fff) + this.v[0];
+        this.pc = (opcode & 0xfff) + this.v[0];
         break;
       case 0xc000:
         // Set Vx = random byte AND kk.

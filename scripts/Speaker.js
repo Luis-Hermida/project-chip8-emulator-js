@@ -23,19 +23,19 @@ export default class Speaker {
   playSound(frecuency) {
     if (this.audioContext && !this.oscillatorNode) {
       this.oscillatorNode = this.audioContext.createOscillator();
+
+      // Using a square wave
+      this.oscillatorNode.type = "square";
+      // Set the frecuency - value in hertz
+      this.oscillatorNode.frequency.setValueAtTime(
+        frecuency || 440,
+        this.audioContext.currentTime
+      );
+
+      // Connect the gain and start the sound
+      this.oscillatorNode.connect(this.gain);
+      this.oscillatorNode.start();
     }
-
-    // Using a square wave
-    this.oscillatorNode.type = "square";
-    // Set the frecuency - value in hertz
-    this.oscillatorNode.frecuency.setValueAtTime(
-      frecuency || 440,
-      this.audioContext.currentTime
-    );
-
-    // Connect the gain and start the sound
-    this.oscillatorNode.connect(this.gain);
-    this.oscillatorNode.start();
   }
 
   stop() {

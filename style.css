@@ -7,13 +7,32 @@ canvas {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
+  justify-content: center;
 }
 
-.settings {
-  padding: 30px;
+.menu {
+  padding: 15px;
   width: 500px;
   margin: auto;
   text-align: center;
   font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
     "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
+  display: flex;
+  margin: 15px;
+  justify-content: space-around;
+}
+
+table,
+td {
+  border: 1px solid black;
+  border-collapse: collapse;
+}
+
+table {
+  height: 120px;
+}
+
+td {
+  width: 20px;
+  text-align: center;
 }

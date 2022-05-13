@@ -23,6 +23,7 @@ const startAnimating = (fps) => {
 };
 
 const animate = (newtime) => {
+  console.log(speaker.gain.gain.value);
   // Calculate elapsed time since last loop
   now = newtime;
   elapsed = now - then;
@@ -44,5 +45,13 @@ const animate = (newtime) => {
   // Request another frame
   requestAnimationFrame(animate);
 };
+
+// Controls
+const volumeControlElement = document.getElementById("volumeControl");
+
+volumeControlElement.addEventListener("change", (event) => {
+  speaker.onChangeVolume(parseInt(event.target.value));
+});
+console.log();
 
 startAnimating(fps);

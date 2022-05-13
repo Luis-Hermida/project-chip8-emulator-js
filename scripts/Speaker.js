@@ -11,6 +11,7 @@ export default class Speaker {
 
     // Connect the oscillator to the context
     this.gain.connect(this.audioContext.destination);
+    this.gain.gain.value = 0.5;
 
     // Mute the audio (Example)
     // this.gain.setValueAtTime(0, this.audioContext.currentTime);
@@ -44,5 +45,9 @@ export default class Speaker {
       this.oscillatorNode.disconnect();
       this.oscillatorNode = null;
     }
+  }
+
+  onChangeVolume(volume) {
+    this.gain.gain.value = volume / 100;
   }
 }

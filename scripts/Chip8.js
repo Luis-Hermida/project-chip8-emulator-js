@@ -3,7 +3,7 @@ import Renderer from "./renderer.js";
 import Speaker from "./speaker.js";
 import CPU from "./cpu.js";
 
-const renderer = new Renderer(10);
+const renderer = new Renderer(15);
 const keyboard = new Keyboard();
 const speaker = new Speaker();
 const cpu = new CPU(renderer, keyboard, speaker);
@@ -23,7 +23,6 @@ const startAnimating = (fps) => {
 };
 
 const animate = (newtime) => {
-  console.log(speaker.gain.gain.value);
   // Calculate elapsed time since last loop
   now = newtime;
   elapsed = now - then;
@@ -47,7 +46,6 @@ const animate = (newtime) => {
 };
 
 // Controls
-
 // Volume
 const volumeControlElement = document.getElementById("volumeControl");
 
@@ -66,7 +64,7 @@ scaleControlElement.addEventListener("change", (event) => {
 const speedControlElement = document.getElementById("speedControl");
 
 speedControlElement.addEventListener("change", (event) => {
-  speaker.onChangeVolume(parseInt(event.target.value));
+  cpu.onChangeSpeed(parseInt(event.target.value));
 });
 
 startAnimating(fps);

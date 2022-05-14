@@ -73,4 +73,10 @@ export default class Renderer {
     // this.setPixel(-1, 62);
     // this.setPixel(64, 62);
   }
+
+  onChangeScale(scale) {
+    this.scale = scale;
+    this.canvas.width = this.columns * this.scale;
+    this.canvas.height = this.rows * this.scale;
+  }
 }

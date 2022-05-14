@@ -3,7 +3,7 @@ import Renderer from "./renderer.js";
 import Speaker from "./speaker.js";
 import CPU from "./cpu.js";
 
-const renderer = new Renderer(15);
+const renderer = new Renderer(10);
 const keyboard = new Keyboard();
 const speaker = new Speaker();
 const cpu = new CPU(renderer, keyboard, speaker);
@@ -47,11 +47,26 @@ const animate = (newtime) => {
 };
 
 // Controls
+
+// Volume
 const volumeControlElement = document.getElementById("volumeControl");
 
 volumeControlElement.addEventListener("change", (event) => {
   speaker.onChangeVolume(parseInt(event.target.value));
 });
-console.log();
+
+// Scale
+const scaleControlElement = document.getElementById("scaleControl");
+
+scaleControlElement.addEventListener("change", (event) => {
+  renderer.onChangeScale(parseInt(event.target.value));
+});
+
+// Speed
+const speedControlElement = document.getElementById("speedControl");
+
+speedControlElement.addEventListener("change", (event) => {
+  speaker.onChangeVolume(parseInt(event.target.value));
+});
 
 startAnimating(fps);

@@ -444,4 +444,8 @@ export default class CPU {
         throw new Error("Unknown opcode " + opcode);
     }
   }
+
+  onChangeSpeed(speed) {
+    this.speed = speed;
+  }
 }

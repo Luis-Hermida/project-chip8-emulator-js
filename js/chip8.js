@@ -1,6 +1,6 @@
 import Keyboard from "./keyboard.js";
 import Renderer from "./renderer.js";
-import Speaker from "./speaker.js.js";
+import Speaker from "./speaker.js";
 import CPU from "./cpu.js";
 
 const renderer = new Renderer(15);

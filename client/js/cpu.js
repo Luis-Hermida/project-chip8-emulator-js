@@ -73,7 +73,6 @@ export default class CPU {
 
   // Chip-8 programs start at location 0x200, so we start loading the program into that memory and upwards.
   loadProgramIntoMemory(program) {
-    console.log(program);
     for (let loc = 0; loc < program.length; loc++) {
       this.memory[0x200 + loc] = program[loc];
     }
@@ -87,9 +86,11 @@ export default class CPU {
     // Handles the response received from sending (request.send()) our request
     request.onload = function () {
       // If the request response has content
-      if (request.response) {
+      if (request.response && request.status !== 404) {
+        console.log(request);
         // Store the contents of the response in an 8-bit array
         let program = new Uint8Array(request.response);
+        console.log(2, program);
 
         // Load the ROM/program into memory
         self.loadProgramIntoMemory(program);

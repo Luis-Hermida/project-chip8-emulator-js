@@ -30,7 +30,6 @@ const animate = (newtime) => {
   // if enough time has elapsed, draw the next frame
   if (elapsed > fpsInterval) {
     cpu.cycle();
-    console.log("A");
     // Get ready for next frame by setting then=now, but
     // also adjust for fpsInterval
     then = now - (elapsed % fpsInterval);

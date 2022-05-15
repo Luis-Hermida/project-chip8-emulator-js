@@ -1,8 +1,9 @@
+import os
 import http.server
-from http.server import HTTPServer, BaseHTTPRequestHandler
 import socketserver
+from http.server import HTTPServer, BaseHTTPRequestHandler
 
-PORT = 8080
+PORT = os.environ['PORT'] | 8080
 
 Handler = http.server.SimpleHTTPRequestHandler
 

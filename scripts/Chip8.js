@@ -11,13 +11,13 @@ const cpu = new CPU(renderer, keyboard, speaker);
 let fps = 60;
 let fpsInterval, startTime, now, then, elapsed;
 
-const startAnimating = (fps) => {
+const startAnimating = (fps, romName) => {
   fpsInterval = 1000 / fps;
   then = window.performance.now();
   startTime = then;
 
   cpu.loadSpritesIntoMemory();
-  cpu.loadRom("BLITZ");
+  cpu.loadRom(romName);
 
   animate();
 };
@@ -67,4 +67,12 @@ speedControlElement.addEventListener("change", (event) => {
   cpu.onChangeSpeed(parseInt(event.target.value));
 });
 
-startAnimating(fps);
+// Rom selector
+const romControlElement = document.getElementById("romControl");
+
+romControlElement.addEventListener("change", (event) => {
+  cpu.onClearCPU();
+  startAnimating(fps, event.target.value);
+});
+
+startAnimating(fps, "BLITZ");

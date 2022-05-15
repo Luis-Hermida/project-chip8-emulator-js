@@ -73,6 +73,7 @@ export default class CPU {
 
   // Chip-8 programs start at location 0x200, so we start loading the program into that memory and upwards.
   loadProgramIntoMemory(program) {
+    console.log(program);
     for (let loc = 0; loc < program.length; loc++) {
       this.memory[0x200 + loc] = program[loc];
     }
@@ -447,5 +448,17 @@ export default class CPU {
 
   onChangeSpeed(speed) {
     this.speed = speed;
+  }
+
+  onClearCPU() {
+    this.memory = new Uint8Array(4096);
+    this.v = new Uint8Array(16);
+    this.i = 0;
+    this.delayTimer = 0;
+    this.soundTimer = 0;
+    this.pc = 0x200;
+    this.stack = new Array();
+    this.paused = false;
+    this.speed = 10;
   }
 }

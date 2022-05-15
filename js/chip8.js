@@ -3,10 +3,10 @@ import Renderer from "./renderer.js";
 import Speaker from "./speaker.js";
 import CPU from "./cpu.js";
 
-const renderer = new Renderer(15);
-const keyboard = new Keyboard();
-const speaker = new Speaker();
-const cpu = new CPU(renderer, keyboard, speaker);
+let renderer = new Renderer(15);
+let keyboard = new Keyboard();
+let speaker = new Speaker();
+let cpu = new CPU(renderer, keyboard, speaker);
 
 let fps = 60;
 let fpsInterval, startTime, now, then, elapsed;
@@ -30,6 +30,7 @@ const animate = (newtime) => {
   // if enough time has elapsed, draw the next frame
   if (elapsed > fpsInterval) {
     cpu.cycle();
+    console.log("A");
     // Get ready for next frame by setting then=now, but
     // also adjust for fpsInterval
     then = now - (elapsed % fpsInterval);
@@ -71,7 +72,10 @@ speedControlElement.addEventListener("change", (event) => {
 const romControlElement = document.getElementById("romControl");
 
 romControlElement.addEventListener("change", (event) => {
-  cpu.onClearCPU();
+  renderer = new Renderer(15);
+  keyboard = new Keyboard();
+  speaker = new Speaker();
+  cpu = new CPU(renderer, keyboard, speaker);
   startAnimating(fps, event.target.value);
 });
 
